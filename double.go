@@ -5,7 +5,8 @@ import (
 )
 
 type Node struct {
-	next *Node
+	next *Node // 다음 노드를 기억한다.
+	prev *Node // 전의 노드를 기억한다.
 	val  int
 }
 
@@ -20,25 +21,29 @@ func (l *LinkeList) AddNode(val int) {
 		l.tail = l.root          // 하나만 있는 상태에서 root와 tail은 같음
 		return
 	}
-	l.tail.next = &Node{val: val}
-	l.tail = l.tail.next
+	l.tail.next = &Node{val: val} // tail 의 다음 노드를 만듦
+	prev := l.tail                // 이전 tail을 기억함
+	l.tail = l.tail.next          // tail을 다음노드로 넣어서 제일 끝의 노드를 항상 tail로 유지
+	l.tail.prev = prev            // 새로운 tail의 전노드를 prev로 기억함
 }
 
 func (l *LinkeList) RemoveNode(node *Node) {
 	if node == l.root {
 		l.root = l.root.next
+		l.root.prev = nil
 		node.next = nil
 		return
 	}
-	prev := l.root
-	for prev.next != node {
-		prev = prev.next
-	}
+	prev := node.prev // 지우고자하는 로그의 이전으로
+
 	if node == l.tail {
 		prev.next = nil
+		l.tail.prev = nil
 		l.tail = prev
 	} else {
+		node.prev = nil
 		prev.next = prev.next.next
+		prev.next.prev = prev
 	}
 	node.next = nil
 }
