@@ -57,6 +57,15 @@ func (l *LinkeList) PrintNodes() {
 	fmt.Printf("%d\n", node.val)
 }
 
+func (l *LinkeList) PrintReverse() {
+	node := l.tail         // tail을 시작점으로
+	for node.prev != nil { //tail의 이전이 없을때까지 진행
+		fmt.Printf("%d ->", node.val) //val값 출력
+		node = node.prev              //node를 이전 노드로 초기화
+	}
+	fmt.Printf("%d\n", node.val) // 현제 노드 출력
+}
+
 func main() {
 	list := &LinkeList{}
 	list.AddNode(0)
@@ -78,6 +87,8 @@ func main() {
 	list.RemoveNode(list.tail)
 
 	list.PrintNodes()
+
+	list.PrintReverse()
 	fmt.Printf("tail:%d\n", list.tail.val)
 
 }
